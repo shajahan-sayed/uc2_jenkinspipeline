@@ -26,8 +26,10 @@ pipeline {
                 mvn sonar:sonar \
                 -Dsonar.projectKey= uc2_jenkinspipeline \
                 -Dsonar.host.url=http://3.26.17.105:9000 \
-                -Dsonar.login=${SONAR_TOKEN}
+                -Dsonar.login=${SONAR_TOKEN} 
                 """
+            }
+   }
         
     stage ('DOCKER BUILD IMAGE') {
       steps {
