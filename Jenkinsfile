@@ -31,21 +31,17 @@ pipeline {
             }
    }
         
-    stage ('DOCKER BUILD IMAGE') {
-      steps {
-          script {
-                    dockerImage = docker.build("shajahans2/uc2_jenkinspipeline:${env.BUILD_NUMBER}")
-          }
-      }
-    }
-    stage ('DOCKER PUSH IMAGE') {
+    stage('Docker Build & Push') {
       steps {
         script {
-              docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials-id') {
-                        dockerImage.push()
-                    }
-                }
-            }
+          // Docker build uses the JAR already created in target/
+          dockerImage = docker.build("shajahans2/uc2_jenkinspipeline:${env.BUILD_NUMBER}")
+          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials-id') {
+            dockerImage.push()
+            dockerImage.push('latest')
+          }
+        }
+      }
     }
         
   }
