@@ -5,7 +5,7 @@ FROM eclipse-temurin:11-jdk
 WORKDIR /app
 
 # Copy the jar built by Maven
-COPY target/uc2_jenkinspipeline-1.0.0.jar app.jar
+COPY target/jenkins-cicd-1.0.0.jar app.jar
 
 # Expose port 8080
 EXPOSE 8080
