@@ -1,10 +1,10 @@
 pipeline {
   agent {
-    docker {
-          image 'docker:24.0.5-dind'  // Docker CLI + DinD
-            args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/root/.m2'
-        }
+     docker {
+      image 'abhishekf5/maven-abhishek-docker-agent:v1'
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
+  }
   stages {
     stage ('git checkout') {
       steps{
