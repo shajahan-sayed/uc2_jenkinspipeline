@@ -31,20 +31,31 @@ pipeline {
             }
    }
         
-    stage('Docker Build & Push') {
-      steps {
-        script {
-          // Docker build uses the JAR already created in target/
-          dockerImage = docker.build("shajahans2/uc2_jenkinspipeline:${env.BUILD_NUMBER}")
-          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials-id') {
-            dockerImage.push()
-            dockerImage.push('latest')
-          }
+   stage('Docker Build & Push') {
+     steps {
+      script {
+       try {
+        // Build Docker image
+        dockerImage = docker.build("shajahans2/uc2_jenkinspipeline:${env.BUILD_NUMBER}")
+        
+        // Push Docker image
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials-id') {
+          echo "Pushing Docker image ${dockerImage.imageName}..."
+          dockerImage.push()
+          dockerImage.push('latest')
         }
+        echo "Docker push successful!"
+      } catch (err) {
+        echo "Docker push failed: ${err}"
+        currentBuild.result = 'FAILURE'
+        error("Stopping pipeline due to Docker push failure.")
       }
     }
-        
   }
+}
+
+        
+}
  
 post {
         success {
