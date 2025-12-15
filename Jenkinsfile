@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-          image 'maven:3.8.6-openjdk-11'
-            args '-v $HOME/.m2:/root/.m2' // cache Maven dependencies
+          image 'docker:24.0.5-dind'  // Docker CLI + DinD
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/root/.m2'
         }
     }
   stages {
